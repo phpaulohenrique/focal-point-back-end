@@ -19,6 +19,17 @@ export async function createUser(app: FastifyInstance) {
       try {
         const { email, name, password } = request.body
         const passwordHash = await app.bcrypt.hash(password)
+        const emailExists = await prisma.user.findUnique({
+          where: {
+            email,
+          },
+        })
+
+        if (emailExists) {
+          reply
+            .code(400)
+            .send({ message: 'Já existe uma conta com esse email cadastrado.' })
+        }
 
         await prisma.user.create({
           data: {

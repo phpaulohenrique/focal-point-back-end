@@ -13,6 +13,7 @@ import { deleteTask } from './http/routes/task/delete-task'
 import { fastifyBcrypt } from 'fastify-bcrypt'
 import { createUser } from './http/routes/user/create-user'
 import { login } from './http/routes/user/login'
+import { verifyAuthCookie } from './middlewares/auth-cookie'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 app.setValidatorCompiler(validatorCompiler)
@@ -26,10 +27,11 @@ app.register(cors, {
   origin: '*',
 })
 
+app.addHook('preHandler', verifyAuthCookie)
+
 app.register(fastifyCookie, {
   secret: 'secret',
   parseOptions: {},
-  // origin: '*',
 })
 
 app.listen({ port: 3333 }, (err) => {
