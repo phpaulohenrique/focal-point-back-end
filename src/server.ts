@@ -4,18 +4,32 @@ import {
   serializerCompiler,
   validatorCompiler,
 } from 'fastify-type-provider-zod'
+import cors from '@fastify/cors'
+import { fastifyCookie } from '@fastify/cookie'
 import { getTasks } from './http/routes/task/get-tasks'
 import { createTask } from './http/routes/task/create-task'
-import cors from '@fastify/cors'
 import { updateTask } from './http/routes/task/update-task'
 import { deleteTask } from './http/routes/task/delete-task'
+import { fastifyBcrypt } from 'fastify-bcrypt'
+import { createUser } from './http/routes/user/create-user'
+import { login } from './http/routes/user/login'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
 
+app.register(fastifyBcrypt, {
+  saltWorkFactor: 12,
+})
+
 app.register(cors, {
   origin: '*',
+})
+
+app.register(fastifyCookie, {
+  secret: 'secret',
+  parseOptions: {},
+  // origin: '*',
 })
 
 app.listen({ port: 3333 }, (err) => {
@@ -30,3 +44,5 @@ app.register(getTasks)
 app.register(createTask)
 app.register(updateTask)
 app.register(deleteTask)
+app.register(createUser)
+app.register(login)

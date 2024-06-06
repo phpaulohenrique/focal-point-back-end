@@ -2,30 +2,33 @@ import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 
 import { prisma } from '../../../lib/prisma'
-import { TaskModel } from '../../../models/task'
 
-const CreateTaskModel = TaskModel.omit({ id: true })
+import { UserModel } from '../../../models/user'
 
-export async function createTask(app: FastifyInstance) {
+const CreateUserModel = UserModel.omit({ id: true })
+
+export async function createUser(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
-    '/tasks',
+    '/users',
     {
       schema: {
-        body: CreateTaskModel,
+        body: CreateUserModel,
       },
     },
     async (request, reply) => {
       try {
-        const { title, completed } = request.body
+        const { email, name, password } = request.body
+        const passwordHash = await app.bcrypt.hash(password)
 
-        const task = await prisma.task.create({
+        await prisma.user.create({
           data: {
-            title,
-            completed,
+            email,
+            name,
+            password: passwordHash,
           },
         })
 
-        reply.code(201).send(task)
+        reply.code(201).send()
       } catch (error) {
         console.error(error)
         reply.code(500).send({

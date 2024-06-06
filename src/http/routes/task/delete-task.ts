@@ -26,7 +26,7 @@ export async function deleteTask(app: FastifyInstance) {
 
         reply.code(200).send()
       } catch (error) {
-        console.error('Error creating task:', error)
+        console.error(error)
         reply.code(500).send({
           message: 'An error occurred.',
           error: error?.toString(),

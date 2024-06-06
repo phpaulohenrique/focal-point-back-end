@@ -14,7 +14,7 @@ export async function getTasks(app: FastifyInstance) {
         const tasks = await prisma.task.findMany({})
         reply.code(200).send(tasks)
       } catch (error) {
-        console.error('Error creating task:', error)
+        console.error(error)
         reply.code(500).send({
           message: 'An error occurred.',
           error: error?.toString(),
