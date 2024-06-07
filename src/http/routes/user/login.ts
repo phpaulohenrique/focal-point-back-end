@@ -56,7 +56,7 @@ export async function login(app: FastifyInstance) {
             httpOnly: true,
             secure: true,
             // sameSite: 'lax', // dev
-            sameSite: 'strict',
+            sameSite: 'none',
             expires: new Date(Date.now() + 1000 * 60 * 60 * 60), // 1 hora
           })
           .send({ name: user.name })
