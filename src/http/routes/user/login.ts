@@ -54,9 +54,9 @@ export async function login(app: FastifyInstance) {
             path: '/',
             signed: false,
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite: 'lax',
-            expires: new Date(Date.now() + 1000 * 60 * 60), // 1 hora
+            expires: new Date(Date.now() + 1000 * 60 * 60 * 60), // 1 hora
           })
           .send({ name: user.name })
       } catch (error) {
