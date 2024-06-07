@@ -28,7 +28,7 @@ export async function createUser(app: FastifyInstance) {
         if (emailExists) {
           reply
             .code(400)
-            .send({ message: 'Já existe uma conta com esse email cadastrado.' })
+            .send({ message: 'Já existe uma conta com esse email.' })
         }
 
         await prisma.user.create({

@@ -15,7 +15,7 @@ model Task {
   title     String
   completed Boolean @default(false)
   user   User @relation(fields: [userId], references: [id])
-  userId String
+  userId String 
 
 
   @@map("tasks")

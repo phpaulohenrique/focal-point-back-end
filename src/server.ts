@@ -14,6 +14,7 @@ import { fastifyBcrypt } from 'fastify-bcrypt'
 import { createUser } from './http/routes/user/create-user'
 import { login } from './http/routes/user/login'
 import { verifyAuthCookie } from './middlewares/auth-cookie'
+import dotenv from 'dotenv'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 app.setValidatorCompiler(validatorCompiler)
@@ -24,18 +25,23 @@ app.register(fastifyBcrypt, {
 })
 
 app.register(cors, {
-  origin: '*',
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
 })
-
-app.addHook('preHandler', verifyAuthCookie)
-
 app.register(fastifyCookie, {
   secret: 'secret',
   parseOptions: {},
 })
 
-app.listen({ port: 3333 }, (err) => {
-  console.log(`Http server running on port ${3333} 🚀`)
+dotenv.config()
+
+app.addHook('preHandler', verifyAuthCookie)
+
+const PORT = process.env.PORT
+const HOST = process.env.HOST
+
+app.listen({ port: PORT, host: HOST }, (err) => {
+  console.log(`Http server running on host: ${HOST} port ${PORT} 🚀`)
   if (err) {
     app.log.error(err)
     process.exit(1)

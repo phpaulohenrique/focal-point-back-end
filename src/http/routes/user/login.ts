@@ -5,20 +5,12 @@ import { prisma } from '../../../lib/prisma'
 
 import { LoginModel } from '../../../models/login'
 
-const clearCookieAndRespond = (
+const customResponse = (
   reply: FastifyReply,
   statusCode: number,
   message: string,
 ) => {
-  reply
-    .clearCookie('userId', {
-      path: '/',
-      signed: true,
-      httpOnly: true,
-      secure: true,
-    })
-    .code(statusCode)
-    .send({ message })
+  reply.code(statusCode).send({ message, error: true })
 }
 
 export async function login(app: FastifyInstance) {
@@ -40,9 +32,9 @@ export async function login(app: FastifyInstance) {
         })
 
         if (!user) {
-          clearCookieAndRespond(
+          customResponse(
             reply,
-            400,
+            401,
             'Não existe conta para o e-mail informado.',
           )
           return
@@ -53,23 +45,23 @@ export async function login(app: FastifyInstance) {
           user!.password,
         )
         if (!isPasswordCorrect) {
-          clearCookieAndRespond(reply, 401, 'E-mail ou senha inválida.')
+          customResponse(reply, 401, 'E-mail ou senha inválida.')
           return
         }
 
         reply
           .setCookie('userId', user!.id, {
             path: '/',
-            signed: true,
+            signed: false,
             httpOnly: true,
-            secure: true, // definir como true em prod
-            // sameSite: 'Strict',
-            expires: new Date(Date.now() + 1000 * 60), // 1 hour
+            secure: false,
+            sameSite: 'lax',
+            expires: new Date(Date.now() + 1000 * 60 * 60), // 1 hora
           })
-          .send({ message: 'Cookie set' })
+          .send({ name: user.name })
       } catch (error) {
         console.error(error)
-        clearCookieAndRespond(reply, 500, 'An error occurred.')
+        customResponse(reply, 500, 'An error occurred.')
       }
     },
   )

@@ -11,7 +11,13 @@ export async function getTasks(app: FastifyInstance) {
     },
     async (request, reply) => {
       try {
-        const tasks = await prisma.task.findMany({})
+        const { userId } = request.cookies
+        // console.log(userId)
+        const tasks = await prisma.task.findMany({
+          where: {
+            userId,
+          },
+        })
         reply.code(200).send(tasks)
       } catch (error) {
         console.error(error)

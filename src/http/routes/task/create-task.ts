@@ -17,11 +17,13 @@ export async function createTask(app: FastifyInstance) {
     async (request, reply) => {
       try {
         const { title, completed } = request.body
+        const { userId } = request.cookies
 
         const task = await prisma.task.create({
           data: {
             title,
             completed,
+            userId,
           },
         })
 
