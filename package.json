@@ -19,7 +19,7 @@
     "@rocketseat/eslint-config": "^2.2.2",
     "@types/node": "^20.14.2",
     "prettier-eslint": "^16.3.0",
-    "prisma": "^5.15.0",
+    "prisma": "^5.16.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.11.2",
     "typescript": "^5.4.5"
