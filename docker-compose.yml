@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: bitnami/postgresql:latest
+    container_name: focalpoint-api
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=focalpoint123
+      - POSTGRES_DB=focalpoint
+    volumes:
+      - postgres_data:/bitnami/postgresql
+
+volumes:
+  postgres_data:

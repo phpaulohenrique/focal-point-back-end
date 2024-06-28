@@ -41,7 +41,7 @@ const PORT = process.env.PORT ? Number(process.env.PORT) : 3333
 const HOST = process.env.HOST
 
 app.listen({ port: PORT, host: '0.0.0.0' }, (err) => {
-  console.log(`Http server running on host: ${HOST} port ${PORT} 🚀`)
+  console.log(`Http server running on port ${PORT} 🚀`)
   if (err) {
     app.log.error(err)
     process.exit(1)
