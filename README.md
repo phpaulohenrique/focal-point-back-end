@@ -1,7 +1,6 @@
 <h1 align="center">Focal Point - Back-end</h1>
 
 
-✔️ Mobile Responsive
 <br>
 <br>
 
@@ -33,10 +32,10 @@ npm install
  docker compose up -d
 ```
 
-<h5>Fill the .env</h5>
+<h5>Fill the .env variables</h5>
 
 ```
-DATABASE_URL=""
+DATABASE_URL="" // docker url
 PORT=3333
 FRONTEND_URL="http://localhost:3000"
 ```
